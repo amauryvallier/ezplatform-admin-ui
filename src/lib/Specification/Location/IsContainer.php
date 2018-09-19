@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace EzSystems\EzPlatformAdminUi\Specification\Location;
 
 use EzSystems\EzPlatformAdminUi\Specification\AbstractSpecification;
-use eZ\Publish\API\Repository\Values\Content\Location;
 
 class IsContainer extends AbstractSpecification
 {
@@ -28,10 +27,8 @@ class IsContainer extends AbstractSpecification
      * @param \eZ\Publish\API\Repository\Values\Content\Location $item
      *
      * @return bool
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    public function isSatisfiedBy(Location $item): bool
+    public function isSatisfiedBy($item): bool
     {
         return $item->getContent()->getContentType()->isContainer;
     }
