@@ -16,17 +16,6 @@ use Symfony\Component\Validator\ConstraintValidator;
 
 class LocationIsContainerValidator extends ConstraintValidator
 {
-    /** @var \EzSystems\EzPlatformAdminUi\Service\ContentTypeService */
-    private $contentTypeService;
-
-    /**
-     * @param \EzSystems\EzPlatformAdminUi\Service\ContentTypeService $contentTypeService
-     */
-    public function __construct(ContentTypeService $contentTypeService)
-    {
-        $this->contentTypeService = $contentTypeService;
-    }
-
     /**
      * Checks if the passed value is valid.
      *
@@ -41,13 +30,9 @@ class LocationIsContainerValidator extends ConstraintValidator
             return;
         }
 
-        $isContainer = new IsContainer($this->contentTypeService);
-        try {
-            if (!$isContainer->isSatisfiedBy($location)) {
-                $this->context->addViolation($constraint->message);
-            }
-        } catch (NotFoundException $e) {
-            $this->context->addViolation($e->getMessage());
+        $isContainer = new IsContainer();
+        if (!$isContainer->isSatisfiedBy($location)) {
+            $this->context->addViolation($constraint->message);
         }
     }
 }
