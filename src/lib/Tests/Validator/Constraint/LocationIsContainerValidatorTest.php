@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace EzSystems\EzPlatformAdminUi\Tests\Validator\Constraint;
 
-use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
@@ -44,7 +43,7 @@ class LocationIsContainerValidatorTest extends TestCase
             ->method('getContent')
             ->willReturn($content);
 
-        $this->contentType =  $this->createMock(ContentType::class);
+        $this->contentType = $this->createMock(ContentType::class);
 
         $content
             ->method('getContentType')
