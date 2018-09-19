@@ -72,10 +72,7 @@ class RequestAttributesListener implements EventSubscriberInterface
             /** @var Location $location */
             $location = $parameterBag->get('location');
 
-            $languageCode = $parameterBag->get('languageCode') ?? $location->contentInfo->mainLanguageCode;
-
-            $content = $this->loadContent($location->contentInfo->id, $languageCode);
-            $parameterBag->set('content', $content);
+            $parameterBag->set('content', $location->getContent());
         }
     }
 

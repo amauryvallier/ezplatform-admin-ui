@@ -82,7 +82,7 @@ class ContentTranslateViewBuilder implements ViewBuilder
         $location = $this->resolveLocation($parameters);
         $content = $this->resolveContent($parameters, $location, $fromLanguage);
         $contentInfo = $content->contentInfo;
-        $contentType = $this->loadContentType($contentInfo->contentTypeId);
+        $contentType = $content->getContentType();
         /** @var \Symfony\Component\Form\FormInterface $form */
         $form = $parameters['form'];
 
@@ -167,20 +167,6 @@ class ContentTranslateViewBuilder implements ViewBuilder
     }
 
     /**
-     * Loads ContentType with id $contentTypeId.
-     *
-     * @param int $contentTypeId
-     *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     */
-    private function loadContentType(int $contentTypeId): ContentType
-    {
-        return $this->repository->getContentTypeService()->loadContentType($contentTypeId);
-    }
-
-    /**
      * @param array $parameters
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Language|null
@@ -246,7 +232,7 @@ class ContentTranslateViewBuilder implements ViewBuilder
         if (isset($parameters['contentId'])) {
             $contentId = $parameters['contentId'];
         } elseif (null !== $location) {
-            $contentId = $location->contentId;
+            return $location->getContent();
         } else {
             throw new InvalidArgumentException(
                 'Content',

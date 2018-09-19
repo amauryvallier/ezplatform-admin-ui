@@ -128,10 +128,18 @@ class MyDraftsTab extends AbstractTab implements OrderedTabInterface, Conditiona
         $pager->setCurrentPage($page);
 
         $data = [];
+        $contentTypes = $contentTypeIds = [];
         /** @var \eZ\Publish\API\Repository\Values\Content\VersionInfo $version */
         foreach ($pager as $version) {
+            $contentTypeIds = $version->getContentInfo()->contentTypeId;
+        }
+
+        if (!empty($contentTypeIds)) {
+            $contentTypes = $this->contentTypeService->loadContentType(array_unique($contentTypeIds));
+        }
+
+        foreach ($pager as $version) {
             $contentInfo = $version->getContentInfo();
-            $contentType = $this->contentTypeService->loadContentType($contentInfo->contentTypeId);
 
             if (null === $contentInfo->mainLocationId) {
                 $locations = $this->locationService->loadParentLocationsForDraftContent($version);
@@ -144,7 +152,7 @@ class MyDraftsTab extends AbstractTab implements OrderedTabInterface, Conditiona
             $data[] = [
                 'contentId' => $contentInfo->id,
                 'name' => $version->getName(),
-                'type' => $contentType->getName(),
+                'type' => $contentTypes[$contentInfo->contentTypeId]->getName(),
                 'language' => $version->initialLanguageCode,
                 'version' => $version->versionNo,
                 'modified' => $version->modificationDate,
